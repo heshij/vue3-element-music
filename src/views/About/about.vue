@@ -11,5 +11,7 @@ export default {
 </script>
 
 <style scoped>
-
+.about-wrapper {
+  width: 100%;
+}
 </style>
