@@ -1,9 +1,16 @@
 $theme-color: #ec4141;
 $--border-color-base: #e1e1e1;
 $--color-white: #ffffff;
+$--color-text-base: #333333;
 $--color-text-active: #313131;
-$--font-size-base: 16px;
-$--font-size-small: 14px;
+
+$--font-size-extra-large: 20px !default;
+$--font-size-large: 18px !default;
+$--font-size-medium: 16px !default;
+$--font-size-base: 14px !default;
+$--font-size-small: 13px !default;
+$--font-size-extra-small: 12px !default;
+
 
 :export {
   theme-color: $theme-color;

@@ -39,19 +39,25 @@ export default {
     .sidebar-list {
       font-size: $--font-size-small;
       padding: 0 12px;
-      li {
+      >li {
         list-style: none;
-        a {
+        padding: 4px 0;
+        >a {
           display: block;
           width: 100%;
-          height: auto;
-          padding: 6px;
+          height: 34px;
+          padding: 0 8px;
+          line-height: 34px;
           border-radius: 4px;
-          color: #999999;
-          &.router-link-active {
+          color: $--color-text-base;
+          transition: all .28s;
+          &.router-link-active{
             color: $--color-text-active;
-            font-size: $--font-size-base;
+            font-size: $--font-size-medium;
             font-weight: 700;
+            background-color: #f6f6f7;
+          }
+          &:hover {
             background-color: #f6f6f7;
           }
         }
