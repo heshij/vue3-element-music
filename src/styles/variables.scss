@@ -1,0 +1,10 @@
+$theme-color: #ec4141;
+$--border-color-base: #e1e1e1;
+$--color-white: #ffffff;
+$--color-text-active: #313131;
+$--font-size-base: 16px;
+$--font-size-small: 14px;
+
+:export {
+  theme-color: $theme-color;
+}

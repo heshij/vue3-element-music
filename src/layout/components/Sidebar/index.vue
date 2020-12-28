@@ -1,14 +1,17 @@
 <template>
     <div class="sidebar-wrapper">
-      <ul>
+      <ul class="sidebar-list">
         <li>
-          <router-link to="/home" tag="a">home</router-link>
+          <router-link to="/home" tag="a">发现音乐</router-link>
         </li>
         <li>
-          <router-link to="/about" tag="a">about</router-link>
+          <router-link to="/video" tag="a">视频</router-link>
         </li>
         <li>
-          <router-link to="/test" tag="a">test</router-link>
+          <router-link to="/friend" tag="a">朋友</router-link>
+        </li>
+        <li>
+          <router-link to="/fm" tag="a">私人FM</router-link>
         </li>
       </ul>
     </div>
@@ -21,9 +24,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  $font-stack: Helvetica, sans-serif;
-  $primary-color: #333;
-
+  @import "@/styles/variables.scss";
   .sidebar-wrapper{
     position: fixed;
     top: 0;
@@ -32,20 +33,26 @@ export default {
     z-index: 99;
     width: 200px;
     height: 100%;
-    background-color: skyblue;
     padding-top: 60px;
-    ul {
-      font-size: 16px;
-      font-family: $font-stack;
-      color: $primary-color;
-
+    background-color: $--color-white;
+    border-right: 1px solid $--border-color-base;
+    .sidebar-list {
+      font-size: $--font-size-small;
+      padding: 0 12px;
       li {
         list-style: none;
-
         a {
-          color: inherit;
+          display: block;
+          width: 100%;
+          height: auto;
+          padding: 6px;
+          border-radius: 4px;
+          color: #999999;
           &.router-link-active {
-            color: #ffffff;
+            color: $--color-text-active;
+            font-size: $--font-size-base;
+            font-weight: 700;
+            background-color: #f6f6f7;
           }
         }
       }

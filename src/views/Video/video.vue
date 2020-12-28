@@ -1,6 +1,6 @@
 <template>
     <div class="about-wrapper">
-      <h1>this is about page</h1>
+      <h1>this is video page</h1>
     </div>
 </template>
 
