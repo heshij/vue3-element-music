@@ -1,8 +1,8 @@
 <template>
-    <div class="home-wrapper">
+    <div class="home-wrapper" v-if="bannerList.length>0">
       <el-carousel :interval="4000" type="card" height="200px">
-        <el-carousel-item v-for="(item) in bannerList" v-bind:key="item.encodeId">
-          <img :src="item.imgUrl">
+        <el-carousel-item v-for="(item, index) in bannerList" :key="index">
+          <img :src="item.imageUrl">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -21,7 +21,7 @@ export default {
     onMounted(async () => {
       const data = await getBanner()
       state.bannerList = data.banners
-      console.log(data)
+      console.log('bannerList:', data.banners)
     })
     return {
       ...toRefs(state)
@@ -30,8 +30,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .home-wrapper {
   width: 100%;
+  padding-top: 20px;
 }
 </style>
