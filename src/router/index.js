@@ -1,7 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Layout from '@/layout'
-import Home from '../views/Home/home.vue'
-import Video from '../views/Video/video.vue'
 
 const router = createRouter({
   // hash模式：createWebHashHistory，history模式：createWebHistory
@@ -11,11 +9,41 @@ const router = createRouter({
       path: '/',
       component: Layout,
       redirect: '/home',
-      children: [{
-        path: 'home',
-        name: 'Home',
-        component: Home
-      }]
+      children: [
+        {
+          path: 'home',
+          name: 'Home',
+          component: () => import('@/views/Home/index.vue'),
+          redirect: '/home/recommend',
+          children: [
+            {
+              path: 'recommend',
+              name: 'Recommend',
+              component: () => import('@/views/Home/recommend.vue')
+            },
+            {
+              path: 'playlist',
+              name: 'Playlist',
+              component: () => import('@/views/PlayList/index.vue')
+            },
+            {
+              path: 'rank',
+              name: 'Rank',
+              component: () => import('@/views/Rank/index.vue')
+            },
+            {
+              path: 'singer',
+              name: 'Singer',
+              component: () => import('@/views/Singer/index.vue')
+            },
+            {
+              path: 'latestmusic',
+              name: 'LatestMusic',
+              component: () => import('@/views/LatestMusic/index.vue')
+            }
+          ]
+        }
+      ]
     },
     {
       path: '/',
@@ -24,7 +52,7 @@ const router = createRouter({
       children: [{
         path: 'video',
         name: 'video',
-        component: Video
+        component: () => import('../views/Video/video.vue')
       }]
     },
     {
@@ -34,7 +62,7 @@ const router = createRouter({
       children: [{
         path: 'friend',
         name: 'friend',
-        component: Video
+        component: () => import('../views/Video/video.vue')
       }]
     },
     {
@@ -44,7 +72,7 @@ const router = createRouter({
       children: [{
         path: 'fm',
         name: 'fm',
-        component: Video
+        component: () => import('../views/Video/video.vue')
       }]
     }
   ]

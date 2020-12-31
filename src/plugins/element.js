@@ -1,4 +1,5 @@
 import {
+  ElLoading,
   ElButton,
   ElCarousel,
   ElCarouselItem
@@ -8,5 +9,5 @@ import locale from 'element-plus/lib/locale'
 
 export default (app) => {
   locale.use(lang)
-  app.use(ElButton).use(ElCarousel).use(ElCarouselItem)
+  app.use(ElLoading).use(ElButton).use(ElCarousel).use(ElCarouselItem)
 }

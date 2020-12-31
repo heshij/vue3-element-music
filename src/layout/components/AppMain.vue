@@ -9,18 +9,21 @@
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   name: 'AppMain',
   setup () {
     const route = useRoute()
-    const key = computed(() => {
+    const router = useRouter()
+    onMounted(() => {
+      console.log('router:', router)
+      console.log('routePath:', route.path)
       return route.path
     })
     return {
-      key
+      onMounted
     }
   }
 }
