@@ -13,26 +13,33 @@
           </el-carousel-item>
         </el-carousel>
       </div>
+      <recommend-songs :song-sheet="songSheet"></recommend-songs>
     </div>
 </template>
 
 <script>
 import { reactive, onMounted, toRefs } from 'vue'
-import { getBanner } from '../../api'
+import { getBanner, getRecommendSongs } from '../../api'
+import RecommendSongs from './components/RecommendSongs'
 
 export default {
   name: 'home',
+  components: { RecommendSongs },
   setup () {
     const state = reactive({
       loading: true,
-      bannerList: []
+      bannerList: [],
+      songSheet: []
     })
     onMounted(async () => {
       state.loading = true
-      const data = await getBanner()
-      state.bannerList = data.banners
+      const bannerData = await getBanner()
+      const songSheetData = await getRecommendSongs()
+      state.bannerList = bannerData.banners
+      state.songSheet = songSheetData.result
       state.loading = false
-      console.log('bannerList:', data.banners)
+      console.log('bannerList:', bannerData.banners)
+      console.log('songSheet:', songSheetData.result)
     })
     return {
       ...toRefs(state)

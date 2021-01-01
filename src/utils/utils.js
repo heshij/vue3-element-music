@@ -1,16 +1,4 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import 'normalize.css/normalize.css'
-import './styles/music-iconfont.css'
-import './styles/index.scss'
-import installElementPlus from './plugins/element.js'
-import router from './router'
-const app = createApp(App)
-installElementPlus(app)
-app.use(router)
-app.mount('#app')
-// 全局过滤器
-app.config.globalProperties.$filters = {
+export default {
   /**
    * 数字转整数 如 100000 转为10万
    * @param {需要转化的数} num

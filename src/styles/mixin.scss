@@ -26,3 +26,10 @@
   width: 100%;
   height: 100%;
 }
+
+@mixin multiline($num) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $num;
+  overflow: hidden;
+}
