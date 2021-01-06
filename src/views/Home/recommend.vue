@@ -14,32 +14,40 @@
         </el-carousel>
       </div>
       <recommend-songs :song-sheet="songSheet"></recommend-songs>
+      <exclusive-broadcast :personalizedList="personalizedList"></exclusive-broadcast>
     </div>
 </template>
 
 <script>
 import { reactive, onMounted, toRefs } from 'vue'
-import { getBanner, getRecommendSongs } from '../../api'
+import { getBanner, getRecommendSongs, getExclusiveBroadcast, getNewSong } from '../../api'
 import RecommendSongs from './components/RecommendSongs'
+import ExclusiveBroadcast from './components/ExclusiveBroadcast'
 
 export default {
   name: 'home',
-  components: { RecommendSongs },
+  components: { ExclusiveBroadcast, RecommendSongs },
   setup () {
     const state = reactive({
       loading: true,
       bannerList: [],
-      songSheet: []
+      songSheet: [],
+      personalizedList: []
     })
     onMounted(async () => {
       state.loading = true
       const bannerData = await getBanner()
       const songSheetData = await getRecommendSongs()
+      const personalizedData = await getExclusiveBroadcast()
+      const newSongData = await getNewSong()
       state.bannerList = bannerData.banners
       state.songSheet = songSheetData.result
+      state.personalizedList = personalizedData.result
       state.loading = false
       console.log('bannerList:', bannerData.banners)
       console.log('songSheet:', songSheetData.result)
+      console.log('personalizedList:', personalizedData.result)
+      console.log('newSongData:', newSongData.result)
     })
     return {
       ...toRefs(state)

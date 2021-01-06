@@ -84,6 +84,16 @@ const router = createRouter({
         name: 'playlistDetail',
         component: () => import('../views/PlayListDetail/index.vue')
       }]
+    },
+    {
+      path: '/',
+      component: Layout,
+      redirect: '/mvDetail',
+      children: [{
+        path: 'mvDetail',
+        name: 'mvDetail',
+        component: () => import('../views/MvDetail/index.vue')
+      }]
     }
   ]
 })

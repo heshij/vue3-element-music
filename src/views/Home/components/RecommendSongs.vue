@@ -6,7 +6,7 @@
         <li v-for="item in songSheet" :key="item.id" @click="selectItem(item)">
           <el-image :src="item.picUrl + '?param=300y300'" lazy></el-image>
           <p>{{item.name}}</p>
-          <span class="count"><i class="icon-play"></i> {{ $filters.tranNumber(item.playCount,0) }}</span>
+          <span class="count"><i class="icon-play"></i> {{ $filters.tranNumber(item.playCount,1) }}</span>
         </li>
       </ul>
     </div>
@@ -65,7 +65,6 @@ export default {
       width: 19%;
       margin-bottom: 12px;
       position: relative;
-      border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
       p {
@@ -75,6 +74,10 @@ export default {
         line-height: 1.5;
         text-align: justify;
         @include multiline($num: 2);
+      }
+      ::v-deep .el-image{
+        border-radius: 4px;
+        border: 1px solid #e1e1e1;
       }
       .count {
         position: absolute;

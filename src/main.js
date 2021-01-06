@@ -8,7 +8,6 @@ import router from './router'
 const app = createApp(App)
 installElementPlus(app)
 app.use(router)
-app.mount('#app')
 // 全局过滤器
 app.config.globalProperties.$filters = {
   /**
@@ -36,3 +35,4 @@ app.config.globalProperties.$filters = {
     }
   }
 }
+app.mount('#app')

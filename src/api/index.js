@@ -7,3 +7,11 @@ export function getBanner () {
 export function getRecommendSongs () {
   return instance.get('/personalized?limit=10')
 }
+
+export function getExclusiveBroadcast () {
+  return instance.get('/personalized/privatecontent')
+}
+
+export function getNewSong () {
+  return instance.get('/personalized/newsong?limit=12')
+}
