@@ -1,25 +1,25 @@
 <template>
-    <div class="exclusive-broadcast-module">
-      <h3>独家放送 <i class="el-icon-arrow-right"></i></h3>
-      <div class="exclusive-broadcast-wrapper">
-        <ul class="exclusive-broadcast-container" v-if="personalizedList.length>0">
-          <li v-for="item in personalizedList" :key="item.id" @click="selectItem(item)">
-            <i class="icon-play"></i>
-            <el-image :src="item.sPicUrl+ '?param=356y200'" lazy></el-image>
-            <p>{{item.name}}</p>
-          </li>
-        </ul>
-      </div>
+  <div class="recommend-mv-module">
+    <h3>推荐MV <i class="el-icon-arrow-right"></i></h3>
+    <div class="recommend-mv-wrapper">
+      <ul class="recommend-mv-container" v-if="recommendMvList.length>0">
+        <li v-for="item in recommendMvList" :key="item.id" @click="selectItem(item)">
+          <span class="count"><i class="icon-play"></i> {{$filters.tranNumber(item.playCount, 0)}}</span>
+          <el-image :src="item.picUrl+ '?param=356y200'" lazy></el-image>
+          <p>{{item.name}}</p>
+        </li>
+      </ul>
     </div>
+  </div>
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
 
 export default {
-  name: 'ExclusiveBroadcast',
+  name: 'RecommendMv',
   props: {
-    personalizedList: {
+    recommendMvList: {
       type: Array,
       default: () => []
     }
@@ -45,7 +45,7 @@ export default {
 <style scoped lang="scss">
   @import "@/styles/mixin.scss";
   @import "@/styles/variables.scss";
-  .exclusive-broadcast-module {
+  .recommend-mv-module {
     max-width: 1100px;
     min-width: 760px;
     margin: 0 auto;
@@ -56,14 +56,14 @@ export default {
       font-size: $--font-size-large;
       margin-bottom: 16px;
     }
-    .exclusive-broadcast-container {
+    .recommend-mv-container {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
       margin: 0;
       padding: 0;
       > li {
-        width: 32.5%;
+        width: 24%;
         margin-bottom: 12px;
         position: relative;
         overflow: hidden;
@@ -83,13 +83,15 @@ export default {
         &:hover p {
           color: $--color-text-active;
         }
-        .icon-play {
+        .count {
           position: absolute;
           top: 10px;
-          left: 10px;
+          right: 10px;
           z-index: 10;
           color: $--color-white;
-          font-size: $--font-size-extra-large;
+          font-size: $--font-size-small;
+          .icon-play {
+          }
         }
       }
     }

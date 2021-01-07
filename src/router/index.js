@@ -94,6 +94,16 @@ const router = createRouter({
         name: 'mvDetail',
         component: () => import('../views/MvDetail/index.vue')
       }]
+    },
+    {
+      path: '/',
+      component: Layout,
+      redirect: '/radioDetail',
+      children: [{
+        path: 'radioDetail',
+        name: 'radioDetail',
+        component: () => import('../views/RadioDetail/index.vue')
+      }]
     }
   ]
 })

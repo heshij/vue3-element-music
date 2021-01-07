@@ -15,39 +15,66 @@
       </div>
       <recommend-songs :song-sheet="songSheet"></recommend-songs>
       <exclusive-broadcast :personalizedList="personalizedList"></exclusive-broadcast>
+      <latest-music :latest-music-list="latestMusicList"></latest-music>
+      <recommend-mv :recommend-mv-list="recommendMvList" ></recommend-mv>
+      <recommend-radio :recommend-radio-list="recommendRadioList"></recommend-radio>
     </div>
 </template>
 
 <script>
 import { reactive, onMounted, toRefs } from 'vue'
-import { getBanner, getRecommendSongs, getExclusiveBroadcast, getNewSong } from '../../api'
+import { getBanner, getRecommendSongs, getExclusiveBroadcast, getNewSong, getRecommendMV, getRecommendRadio } from '../../api'
+import { createSong } from '../../utils/song'
 import RecommendSongs from './components/RecommendSongs'
 import ExclusiveBroadcast from './components/ExclusiveBroadcast'
+import LatestMusic from './components/LatestMusic'
+import RecommendMv from './components/RecommendMv'
+import RecommendRadio from './components/RecommendRadio'
 
 export default {
   name: 'home',
-  components: { ExclusiveBroadcast, RecommendSongs },
+  components: { RecommendRadio, RecommendMv, LatestMusic, ExclusiveBroadcast, RecommendSongs },
   setup () {
     const state = reactive({
       loading: true,
       bannerList: [],
       songSheet: [],
-      personalizedList: []
+      personalizedList: [],
+      latestMusicList: [],
+      recommendMvList: [],
+      recommendRadioList: []
     })
+    // eslint-disable-next-line no-unused-vars
+    const normalizedSongs = (list) => {
+      const ret = []
+      list.map(item => {
+        if (item.id) {
+          ret.push(createSong(item.song))
+        }
+      })
+      return ret
+    }
     onMounted(async () => {
       state.loading = true
       const bannerData = await getBanner()
       const songSheetData = await getRecommendSongs()
       const personalizedData = await getExclusiveBroadcast()
       const newSongData = await getNewSong()
+      const recommendMVData = await getRecommendMV()
+      const recommendRadioData = await getRecommendRadio()
       state.bannerList = bannerData.banners
       state.songSheet = songSheetData.result
       state.personalizedList = personalizedData.result
+      state.latestMusicList = normalizedSongs(newSongData.result)
+      state.recommendMvList = recommendMVData.result
+      state.recommendRadioList = recommendRadioData.result
       state.loading = false
       console.log('bannerList:', bannerData.banners)
       console.log('songSheet:', songSheetData.result)
       console.log('personalizedList:', personalizedData.result)
-      console.log('newSongData:', newSongData.result)
+      console.log('latestMusicList:', normalizedSongs(newSongData.result))
+      console.log('recommendMvList:', recommendMVData.result)
+      console.log('recommendRadioList:', recommendRadioData.result)
     })
     return {
       ...toRefs(state)

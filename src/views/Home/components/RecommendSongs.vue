@@ -50,6 +50,7 @@ export default {
   min-width: 760px;
   margin: 0 auto;
   overflow: hidden;
+  padding-bottom: 20px;
   h3 {
     color: $--color-text-base;
     font-size: $--font-size-large;
