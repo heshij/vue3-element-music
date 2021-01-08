@@ -45,3 +45,41 @@ export function getRecommendMV () {
 export function getRecommendRadio () {
   return instance.get('/personalized/djprogram')
 }
+
+/**
+ * @method 获取歌单详情
+ * @param id  歌单 id
+ * @param s 歌单最近的 s 个收藏者,默认为8
+ * @param time 缓存时间
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function getPlayListDetail (id, s) {
+  return instance.get(`/playlist/detail?id=${id}&s=${s}`)
+}
+
+/**
+ * @method 调用此接口,传入歌曲 id, 可获取音乐是否可用,返回 { success: true, message: 'ok' } 或者 { success: false, message: '亲爱的,暂无版权' }
+ * @param id
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function checkMusic (id) {
+  return instance.get(`/check/music?id=${id}`)
+}
+
+/**
+ * @method 获取歌曲详情
+ * @param ids  音乐 id
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function getSongDetail (ids) {
+  return instance.get(`/song/detail?ids=${ids}`)
+}
+
+/**
+ * @method 获取歌曲url
+ * @param id 音乐 id
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function getSongUrl (id) {
+  return instance.get(`/song/url?id=${id}`)
+}

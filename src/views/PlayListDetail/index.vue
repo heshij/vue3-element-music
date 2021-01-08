@@ -1,12 +1,28 @@
 <template>
   <div class="main-wrapper">
-    歌单详情
   </div>
 </template>
 
 <script>
+import { reactive, onMounted, toRefs } from 'vue'
+import { useRoute } from 'vue-router'
+import { getPlayListDetail } from '../../api'
 export default {
-  name: 'index'
+  name: 'index',
+  setup () {
+    const route = useRoute()
+    const state = reactive({
+      detail: {}
+    })
+    onMounted(async () => {
+      const id = route.query.id
+      const data = await getPlayListDetail(id, 6)
+      console.log(data)
+    })
+    return {
+      ...toRefs(state)
+    }
+  }
 }
 </script>
 
