@@ -5,6 +5,9 @@ function resolve (dir) {
 }
 
 module.exports = {
+  devServer: {
+    disableHostCheck: true
+  },
   configureWebpack: {
     resolve: {
       alias: {
@@ -12,4 +15,12 @@ module.exports = {
       }
     }
   }
+  // css: {
+  //   loaderOptions: {
+  //     scss: {
+  //       // eslint-disable-next-line
+  //       prependData: `@import '@/style/variables.scss';`
+  //     }
+  //   }
+  // }
 }

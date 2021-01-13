@@ -16,7 +16,7 @@ export default {
     })
     onMounted(async () => {
       const id = route.query.id
-      const data = await getPlayListDetail(id, 6)
+      const data = await getPlayListDetail(id, 8)
       console.log(data)
     })
     return {
