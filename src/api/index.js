@@ -50,7 +50,6 @@ export function getRecommendRadio () {
  * @method 获取歌单详情
  * @param id  歌单 id
  * @param s 歌单最近的 s 个收藏者,默认为8
- * @param time 缓存时间
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function getPlayListDetail (id, s) {
