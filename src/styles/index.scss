@@ -17,6 +17,7 @@ label {
 html {
   height: 100%;
   box-sizing: border-box;
+  @include scrollBar
 }
 
 html, body, h1, h2, h3, h4, h5, h6, hr, p, iframe, dl, dt, dd, ul, ol, li, pre, form, button, input, textarea, th, td, fieldset {

@@ -2,13 +2,29 @@
   <div class="recommend-songs-module">
     <h3>推荐歌单 <i class="el-icon-arrow-right"></i></h3>
     <div class="song-sheet-wrapper">
-      <ul class="song-sheet-container" v-if="songSheet.length>0">
-        <li v-for="item in songSheet" :key="item.id" @click="selectItem(item)">
-          <el-image :src="item.picUrl + '?param=300y300'" lazy></el-image>
-          <p>{{item.name}}</p>
-          <span class="count"><i class="icon-play"></i> {{ $filters.tranNumber(item.playCount,1) }}</span>
-        </li>
-      </ul>
+      <el-skeleton :loading="loading" animated :count="3" :throttle="500">
+        <template #template>
+          <div class="el-skeleton-wrapper">
+            <el-skeleton-item
+              variant="image"
+              style="width: 90%;height: 200px"
+            />
+            <div style="padding: 14px 0;width: 90%;">
+              <el-skeleton-item variant="h3"/>
+              <el-skeleton-item variant="text" style="width: 40%;" />
+            </div>
+          </div>
+        </template>
+        <template #default>
+          <ul class="song-sheet-container">
+            <li v-for="item in songSheet" :key="item.id" @click="selectItem(item)">
+              <el-image :src="item.picUrl + '?param=300y300'" lazy></el-image>
+              <p>{{item.name}}</p>
+              <span class="count"><i class="icon-play"></i> {{ $filters.tranNumber(item.playCount,1) }}</span>
+            </li>
+          </ul>
+        </template>
+      </el-skeleton>
     </div>
   </div>
 </template>
@@ -21,6 +37,10 @@ export default {
     songSheet: {
       type: Array,
       default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['callback'],
@@ -55,6 +75,13 @@ export default {
     color: $--color-text-base;
     font-size: $--font-size-large;
     margin-bottom: 16px;
+  }
+  .el-skeleton {
+    display: flex;
+    justify-content: space-between;
+    .el-skeleton-wrapper {
+      width: 33.3%;
+    }
   }
   .song-sheet-container {
     display: flex;

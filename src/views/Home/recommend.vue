@@ -13,7 +13,7 @@
           </el-carousel-item>
         </el-carousel>
       </div>
-      <recommend-songs :song-sheet="songSheet"></recommend-songs>
+      <recommend-songs :song-sheet="songSheet" :loading="loading"></recommend-songs>
       <exclusive-broadcast :personalizedList="personalizedList"></exclusive-broadcast>
       <latest-music :latest-music-list="latestMusicList"></latest-music>
       <recommend-mv :recommend-mv-list="recommendMvList" ></recommend-mv>
