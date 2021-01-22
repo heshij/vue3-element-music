@@ -5,12 +5,13 @@ import './styles/music-iconfont.css'
 import './styles/index.scss'
 import installElementPlus from './plugins/element.js'
 import router from './router'
-import { tranNumber } from './utils/utils'
+import { tranNumber, dateFormat } from './utils/utils'
 const app = createApp(App)
 installElementPlus(app)
 app.use(router)
 // 全局过滤器
 app.config.globalProperties.$filters = {
-  tranNumber
+  tranNumber,
+  dateFormat
 }
 app.mount('#app')

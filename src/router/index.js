@@ -82,7 +82,25 @@ const router = createRouter({
       children: [{
         path: 'playlistDetail',
         name: 'playlistDetail',
-        component: () => import('../views/PlayListDetail/index.vue')
+        component: () => import('../views/PlayListDetail/index.vue'),
+        redirect: '/playlistDetail/songs',
+        children: [
+          {
+            path: 'songs',
+            name: 'songs',
+            component: () => import('../views/PlayListDetail/songs')
+          },
+          {
+            path: 'comment',
+            name: 'comment',
+            component: () => import('../views/PlayListDetail/comment')
+          },
+          {
+            path: 'collectors',
+            name: 'collectors',
+            component: () => import('../views/PlayListDetail/collectors')
+          }
+        ]
       }]
     },
     {

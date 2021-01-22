@@ -23,6 +23,29 @@ export function tranNumber (num, point) {
   }
 }
 
+// 格式化时间毫秒转分秒
+export function formatTime (time) {
+  // 取整
+  time = ~~time
+  var formatTime
+  if (time < 10) {
+    formatTime = '00:0' + time
+  } else if (time < 60) {
+    formatTime = '00:' + time
+  } else {
+    var m = ~~parseInt((time % (1000 * 60 * 60)) / (1000 * 60))
+    if (m < 10) {
+      m = '0' + m
+    }
+    var s = ~~parseInt((time % (1000 * 60)) / 1000)
+    if (s < 10) {
+      s = '0' + s
+    }
+    formatTime = m + ':' + s
+  }
+  return formatTime
+}
+
 // 转换成秒
 export function formatSecond (time) {
   // 取整
@@ -38,4 +61,39 @@ export function formatSecond (time) {
     secondTime = Number(m * 60 + s)
   }
   return secondTime
+}
+
+// 秒转00:00
+export function formatSecondTime (interval) {
+  interval = interval | 0
+  const m = (interval / 60) | 0
+  const s = interval % 60
+  return `${formatZero(m, 2)}:${formatZero(s, 2)}`
+}
+
+// 日期格式化
+export function dateFormat (str, type) {
+  const date = new Date(str)
+  const year = date.getFullYear()
+  const month = formatZero(date.getMonth() + 1, 2)
+  const day = formatZero(date.getDate(), 2)
+  const hour = formatZero(date.getHours(), 2)
+  const minute = formatZero(date.getMinutes(), 2)
+  const seconds = formatZero(date.getSeconds(), 2)
+  // eslint-disable-next-line eqeqeq
+  if (type == 'YYYY-MM-DD') {
+    return `${year}-${month}-${day}`
+    // eslint-disable-next-line eqeqeq
+  } else if (type == 'YYYY-MM-DD HH:MM:SS') {
+    return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+    // eslint-disable-next-line eqeqeq
+  } else if (type == 'MM/DD  HH:MM:SS') {
+    return `${month}/${day} ${hour}:${minute}:${seconds}`
+  }
+}
+
+// 补0方法
+function formatZero (num, len) {
+  if (String(num).length > len) return num
+  return (Array(len).join(0) + num).slice(-len)
 }
