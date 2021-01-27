@@ -9,23 +9,8 @@
 </template>
 
 <script>
-import { onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
 export default {
-  name: 'AppMain',
-  setup () {
-    const route = useRoute()
-    const router = useRouter()
-    onMounted(() => {
-      console.log('router:', router)
-      console.log('routePath:', route.path)
-      return route.path
-    })
-    return {
-      onMounted
-    }
-  }
+  name: 'AppMain'
 }
 </script>
 

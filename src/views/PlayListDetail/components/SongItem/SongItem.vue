@@ -10,7 +10,7 @@
           <span class="song-time">时长</span>
         </li>
         <li @click="selectItem" v-for="(item, index) in songList" :key="item.id">
-          <span class="sort-num">{{index}}</span>
+          <span class="sort-num">{{index + 1}}</span>
           <div class="icon-wrapper">
             <i class="icon-like"></i>
             <i class="icon-download"></i>
@@ -18,7 +18,7 @@
           <span class="song-name" :title="item.name">{{item.name}}</span>
           <span class="singer-name" :title="item.singer">{{item.singer}}</span>
           <span class="album-name" :title="item.album">{{item.album}}</span>
-          <span class="song-time">时长</span>
+          <span class="song-time">{{$filters.formatSecondTime(item.duration)}}</span>
         </li>
       </ul>
     </div>
@@ -60,6 +60,9 @@ export default {
     line-height: 34px;
     font-size: $--font-size-base;
     color: #656565;
+    &:first-child:hover {
+      background-color: $--color-white;
+    }
     &:nth-child(odd) {
       background-color: #ffffff;
     }
@@ -71,6 +74,9 @@ export default {
     }
     &:hover {
       background-color: #f0f1f2;
+    }
+    span {
+      cursor: default;
     }
     .sort-num {
       display: block;

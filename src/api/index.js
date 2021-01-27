@@ -82,3 +82,24 @@ export function getSongDetail (ids) {
 export function getSongUrl (id) {
   return instance.get(`/song/url?id=${id}`)
 }
+
+/**
+ * @method 歌单评论
+ * @params id 歌单 id
+ * @params limit 取出评论数量 默认为 20
+ * @params offset 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+ * @params before 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过5000条评论的时候需要用到)
+ */
+export function getPlayListComment (params) {
+  return instance.get('/comment/playlist', { params })
+}
+
+/**
+ * @method 歌单收藏者
+ * @params id 歌单 id
+ * @params limit 取出收藏者数量 默认为 20
+ * @params offset 偏移数量 , 用于分页 , 如 :( 收藏者页数 -1)*20, 其中 20 为 limit 的值
+ */
+export function getPlayListSubscribers (params) {
+  return instance.get('/playlist/subscribers', { params })
+}

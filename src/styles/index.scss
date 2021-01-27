@@ -71,3 +71,15 @@ div:focus {
     height: 0;
   }
 }
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: $theme-color !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active:hover {
+  color: #ffffff !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: $theme-color !important;
+}

@@ -17,15 +17,15 @@
           <span class="play-all-btn">
             <i class="icon-play"></i>
             播放全部
-            <i class="el-icon-plus"></i>
+<!--            <i class="el-icon-plus"></i>-->
           </span>
           <span class="collect-btn">
             <i class="icon-collect-lists"></i>
-            收藏({{$filters.tranNumber(detail.subscribedCount)}})
+            收藏({{$filters.tranNumber(detail.subscribedCount, 1)}})
           </span>
           <span class="share-btn">
             <i class="icon-share"></i>
-            收藏({{$filters.tranNumber(detail.shareCount)}})
+            分享({{$filters.tranNumber(detail.shareCount, 1)}})
           </span>
         </div>
         <ul class="playlist-info">
@@ -42,12 +42,12 @@
         </ul>
       </div>
     </div>
-    <div class="playlist-main">
+    <div class="playlist-main" v-if="detail.id>0">
       <div class="second-level-nav">
         <ul>
-          <li @click="toSongs"><router-link to="/playlistDetail/songs">歌曲列表</router-link></li>
-          <li><router-link to="/playlistDetail/comment">评论(111)</router-link></li>
-          <li><router-link to="/playlistDetail/collectors">收藏者</router-link></li>
+          <li @click="routeJump('songs')"><router-link to="/playlistDetail/songs">歌曲列表</router-link></li>
+          <li @click="routeJump('comment')"><router-link to="/playlistDetail/comment">评论({{$filters.tranNumber(detail.commentCount, 1)}})</router-link></li>
+          <li @click="routeJump('collectors')"><router-link to="/playlistDetail/collectors">收藏者</router-link></li>
         </ul>
       </div>
     </div>
@@ -74,12 +74,12 @@ export default {
       detail: {},
       creator: {}
     })
-    const toSongs = () => {
+    const routeJump = (routeName) => {
       const query = {
         id: state.detail.id
       }
       router.push({
-        name: 'songs',
+        name: routeName,
         query
       })
     }
@@ -97,7 +97,7 @@ export default {
       }, 300)
     })
     return {
-      toSongs,
+      routeJump,
       ...toRefs(state)
     }
   }
@@ -185,6 +185,9 @@ export default {
             margin-right: 18px;
             border-radius: 16px;
             cursor: pointer;
+            &:hover {
+              background-color: #f2f2f2;
+            }
             i {
               margin-right: 4px;
             }
@@ -193,6 +196,9 @@ export default {
             background-color: $theme-color;
             color: $--color-white;
             border-color: $theme-color;
+            &:hover {
+              background-color: #CC3232;
+            }
           }
         }
         .playlist-info {
