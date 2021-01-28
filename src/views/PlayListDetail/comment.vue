@@ -13,7 +13,7 @@
         @current-change="handleCurrentChange"
       >
       </el-pagination>-->
-      <pagination :total="pageTotal" :page="currentPage" :limit="limit" @pagination="handlePlayListComment"></pagination>
+      <pagination :total="pageTotal" :limit="limit" :current-page="currentPage" @pagination="handlePlayListComment"></pagination>
     </div>
 </template>
 

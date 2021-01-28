@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 import { scrollTo } from '@/utils/scroll-to'
 export default defineComponent({
   name: 'Pagination',
@@ -23,9 +23,9 @@ export default defineComponent({
       required: true,
       type: Number
     },
-    page: {
+    currentPage: {
       type: Number,
-      default: 1
+      default: 0
     },
     limit: {
       type: Number,
@@ -50,34 +50,33 @@ export default defineComponent({
   },
   emits: ['pagination'],
   setup (props, ctx) {
-    const currentPage = computed({
-      get () {
-        return props.page
-      },
-      set (val) {
-        ctx.emit('update:page', val)
-      }
+    const { limit } = toRefs(props)
+    const state = reactive({
+      currentPage: 0
     })
     const handleSizeChange = (val) => {
-      ctx.emit('pagination', { offset: props.limit * currentPage.value, limit: val })
-      console.log(props.limit * currentPage.value)
+      // ctx.emit('pagination', { offset: props.limit * props.currentPage, limit: val })
       if (props.autoScroll) {
         scrollTo(0, 800)
       }
+      // limit.value = val
+      // state.offset = props.limit * state.currentPage
+      ctx.emit('pagination', { offset: props.limit * state.currentPage, limit: val })
     }
     const handleCurrentChange = (val) => {
-      ctx.emit('pagination', { page: val, offset: (val - 1) * props.limit })
-      // console.log(val)
-      // console.log((val - 1) * props.limit)
+      // ctx.emit('pagination', { page: val, offset: (val - 1) * props.limit })
       if (props.autoScroll) {
         scrollTo(0, 800)
       }
+      state.currentPage = val
+      // state.offset = (val - 1) * limit.value
+      ctx.emit('pagination', { offset: (val - 1) * limit.value, limit: val })
     }
     return {
       props,
-      currentPage,
       handleSizeChange,
-      handleCurrentChange
+      handleCurrentChange,
+      ...toRefs(state)
     }
   }
 })

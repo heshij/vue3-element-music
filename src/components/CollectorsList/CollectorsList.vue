@@ -72,8 +72,9 @@ export default {
           }
           p {
             width: 100%;
-            font-size: $--font-size-small;
+            font-size: $--font-size-extra-small;
             color: $--color-text-secondary;
+            line-height: 20px;
             @include multiline(2)
           }
         }
