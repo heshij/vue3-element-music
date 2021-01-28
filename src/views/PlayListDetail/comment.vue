@@ -1,8 +1,8 @@
 <template>
     <div class="comment-module" v-if="comments.length>0">
-      <comment-list :comments-list="hotComments" :comments-list-title="commentsTitle" v-if="hotComments!==undefined"></comment-list>
+      <comment-list :comments-list="hotComments" :comments-list-title="commentsTitle" v-if="hotComments!==undefined && hotComments.length>0"></comment-list>
       <comment-list :comments-list="comments"></comment-list>
-      <el-pagination
+      <!--<el-pagination
         background
         hide-on-single-page
         layout="prev, pager, next"
@@ -12,7 +12,8 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       >
-      </el-pagination>
+      </el-pagination>-->
+      <pagination :total="pageTotal" :page="currentPage" :limit="limit" @pagination="handlePlayListComment"></pagination>
     </div>
 </template>
 
@@ -21,9 +22,11 @@ import { useRoute } from 'vue-router'
 import { onMounted, reactive, toRefs } from 'vue'
 import { getPlayListComment } from '../../api'
 import CommentList from '../../components/CommentList/CommentList'
+import Pagination from '../../components/Pagination/Pagination'
 export default {
   name: 'comment',
   components: {
+    Pagination,
     CommentList
   },
   setup () {
@@ -37,17 +40,7 @@ export default {
       offset: 0,
       currentPage: 0
     })
-    const handleSizeChange = (val) => {
-      state.limit = val
-      state.offset = state.limit * state.currentPage
-      _getPlayListComment()
-    }
-    const handleCurrentChange = (val) => {
-      state.currentPage = val
-      state.offset = (val - 1) * state.limit
-      _getPlayListComment()
-    }
-    const _getPlayListComment = async () => {
+    const handlePlayListComment = async () => {
       const params = {
         id: route.query.id,
         limit: state.limit,
@@ -62,11 +55,10 @@ export default {
       console.log('hotComments', commentData.hotComments)
     }
     onMounted(() => {
-      _getPlayListComment()
+      handlePlayListComment()
     })
     return {
-      handleSizeChange,
-      handleCurrentChange,
+      handlePlayListComment,
       ...toRefs(state)
     }
   }

@@ -1,26 +1,36 @@
 <template>
     <div class="song-list-wrap">
-      <ul class="list-con">
-        <li>
-          <span class="sort-num"></span>
-          <div class="icon-wrapper"></div>
-          <span class="song-name">音乐标题</span>
-          <span class="singer-name">歌手</span>
-          <span class="album-name">专辑</span>
-          <span class="song-time">时长</span>
-        </li>
-        <li @click="selectItem" v-for="(item, index) in songList" :key="item.id">
-          <span class="sort-num">{{index + 1}}</span>
-          <div class="icon-wrapper">
-            <i class="icon-like"></i>
-            <i class="icon-download"></i>
+      <el-skeleton :loading="loading" animated :count="6" :throttle="500">
+        <template #template>
+          <div class="el-skeleton-wrapper">
+            <el-skeleton-item variant="h3" style="width: 80%;margin-bottom: 12px"/>
+            <el-skeleton-item variant="h3"/>
           </div>
-          <span class="song-name" :title="item.name">{{item.name}}</span>
-          <span class="singer-name" :title="item.singer">{{item.singer}}</span>
-          <span class="album-name" :title="item.album">{{item.album}}</span>
-          <span class="song-time">{{$filters.formatSecondTime(item.duration)}}</span>
-        </li>
-      </ul>
+        </template>
+        <template #default>
+          <ul class="list-con">
+            <li>
+              <span class="sort-num"></span>
+              <div class="icon-wrapper"></div>
+              <span class="song-name">音乐标题</span>
+              <span class="singer-name">歌手</span>
+              <span class="album-name">专辑</span>
+              <span class="song-time">时长</span>
+            </li>
+            <li @click="selectItem" v-for="(item, index) in songList" :key="item.id">
+              <span class="sort-num">{{index + 1}}</span>
+              <div class="icon-wrapper">
+                <i class="icon-like"></i>
+                <i class="icon-download"></i>
+              </div>
+              <span class="song-name" :title="item.name">{{item.name}}</span>
+              <span class="singer-name" :title="item.singer">{{item.singer}}</span>
+              <span class="album-name" :title="item.album">{{item.album}}</span>
+              <span class="song-time">{{$filters.formatSecondTime(item.duration)}}</span>
+            </li>
+          </ul>
+        </template>
+      </el-skeleton>
     </div>
 </template>
 
@@ -31,6 +41,10 @@ export default {
     songList: {
       type: Array,
       default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, ctx) {

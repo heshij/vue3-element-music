@@ -4,7 +4,13 @@
       <ul class="comment-list">
         <li v-for="item in commentsList" :key="item.commentId">
           <div class="img-wrap">
-            <el-image :src="item.user.avatarUrl + '?param=50y50'" lazy></el-image>
+            <el-image :src="item.user.avatarUrl + '?param=50y50'" lazy>
+              <template #placeholder>
+                <div class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </template>
+            </el-image>
           </div>
           <div class="text-wrap">
             <div class="comment-content">

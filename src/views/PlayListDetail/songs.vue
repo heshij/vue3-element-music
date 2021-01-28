@@ -1,6 +1,6 @@
 <template>
-    <div class="songs-module" v-if="songList.length>0">
-      <song-item :song-list="songList" @selectItem="selectItem"></song-item>
+    <div class="songs-module">
+      <song-item :song-list="songList" :loading="loading" @selectItem="selectItem"></song-item>
     </div>
 </template>
 
@@ -15,10 +15,11 @@ export default {
   components: { SongItem },
   setup () {
     const selectItem = () => {
-      console.log('selectItem')
+      // console.log('selectItem')
     }
     const route = useRoute()
     const state = reactive({
+      loading: true,
       songList: []
     })
     const normalizedTrackIds = (list) => {
@@ -51,10 +52,10 @@ export default {
       console.log('songList:', state.songList)
     }
     onMounted(() => {
+      state.loading = true
       const id = route.query.id
-      setTimeout(() => {
-        _getPlayListDetail(id)
-      }, 300)
+      _getPlayListDetail(id)
+      state.loading = false
     })
     return {
       selectItem,

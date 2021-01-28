@@ -43,7 +43,6 @@ export default {
       default: true
     }
   },
-  emits: ['callback'],
   setup () {
     const router = useRouter()
     const selectItem = (item) => {

@@ -83,3 +83,27 @@ div:focus {
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
   color: $theme-color !important;
 }
+
+.el-image {
+  width: 100%;
+  height: 100%;
+  .el-image__inner {
+    object-fit: cover;
+  }
+  .image-slot {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 24px;
+    color: #C0C4CC;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+  }
+}
