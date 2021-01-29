@@ -8,7 +8,7 @@
           <router-link to="/video" tag="a">视频</router-link>
         </li>
         <li>
-          <router-link to="/friend" tag="a">朋友</router-link>
+          <router-link to="/friends" tag="a">朋友</router-link>
         </li>
         <li>
           <router-link to="/fm" tag="a">私人FM</router-link>

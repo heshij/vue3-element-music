@@ -51,18 +51,18 @@ const router = createRouter({
       redirect: '/video',
       children: [{
         path: 'video',
-        name: 'video',
-        component: () => import('../views/Video/video.vue')
+        name: 'Video',
+        component: () => import('../views/Video/Video.vue')
       }]
     },
     {
       path: '/',
       component: Layout,
-      redirect: '/friend',
+      redirect: '/friends',
       children: [{
-        path: 'friend',
-        name: 'friend',
-        component: () => import('../views/Video/video.vue')
+        path: 'friends',
+        name: 'Friends',
+        component: () => import('../views/Friends/Friends.vue')
       }]
     },
     {
@@ -71,8 +71,8 @@ const router = createRouter({
       redirect: '/fm',
       children: [{
         path: 'fm',
-        name: 'fm',
-        component: () => import('../views/Video/video.vue')
+        name: 'FM',
+        component: () => import('../views/FM/FM.vue')
       }]
     },
     {

@@ -18,7 +18,9 @@
         <template #default>
           <ul class="song-sheet-container">
             <li v-for="item in songSheet" :key="item.id" @click="selectItem(item)">
-              <el-image :src="item.picUrl + '?param=300y300'" lazy></el-image>
+              <div class="img-wrap">
+                <el-image :src="item.picUrl + '?param=300y300'" lazy></el-image>
+              </div>
               <p>{{item.name}}</p>
               <span class="count"><i class="icon-play"></i> {{ $filters.tranNumber(item.playCount,1) }}</span>
             </li>
@@ -89,11 +91,27 @@ export default {
     margin: 0;
     padding: 0;
     > li {
+      position: relative;
       width: 19%;
       margin-bottom: 12px;
-      position: relative;
       overflow: hidden;
       cursor: pointer;
+      .img-wrap {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        overflow: hidden;
+        ::v-deep .el-image{
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 4px;
+          border: 1px solid #e1e1e1;
+        }
+      }
       p {
         width: 100%;
         font-size: $--font-size-base;
@@ -101,10 +119,6 @@ export default {
         line-height: 1.5;
         text-align: justify;
         @include multiline($num: 2);
-      }
-      ::v-deep .el-image{
-        border-radius: 4px;
-        border: 1px solid #e1e1e1;
       }
       .count {
         position: absolute;

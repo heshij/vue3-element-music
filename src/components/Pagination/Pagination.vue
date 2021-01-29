@@ -45,7 +45,7 @@ export default defineComponent({
     },
     autoScroll: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   emits: ['pagination'],
@@ -55,22 +55,20 @@ export default defineComponent({
       currentPage: 0
     })
     const handleSizeChange = (val) => {
-      // ctx.emit('pagination', { offset: props.limit * props.currentPage, limit: val })
       if (props.autoScroll) {
         scrollTo(0, 800)
       }
-      // limit.value = val
-      // state.offset = props.limit * state.currentPage
-      ctx.emit('pagination', { offset: props.limit * state.currentPage, limit: val })
+      limit.value = val
+      const offset = state.offset = props.limit * state.currentPage
+      ctx.emit('pagination', { offset, limit: limit.value })
     }
     const handleCurrentChange = (val) => {
-      // ctx.emit('pagination', { page: val, offset: (val - 1) * props.limit })
       if (props.autoScroll) {
         scrollTo(0, 800)
       }
       state.currentPage = val
-      // state.offset = (val - 1) * limit.value
-      ctx.emit('pagination', { offset: (val - 1) * limit.value, limit: val })
+      const offset = (val - 1) * limit.value
+      ctx.emit('pagination', { offset, limit: limit.value })
     }
     return {
       props,
@@ -82,9 +80,17 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .pagination-container {
     background: #fff;
-    padding: 32px 16px;
+    padding: 16px 0 36px 0;
+    position: relative;
+    ::v-deep .el-pagination {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99;
+    }
   }
 </style>

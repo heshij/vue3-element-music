@@ -2,18 +2,7 @@
     <div class="comment-module" v-if="comments.length>0">
       <comment-list :comments-list="hotComments" :comments-list-title="commentsTitle" v-if="hotComments!==undefined && hotComments.length>0"></comment-list>
       <comment-list :comments-list="comments"></comment-list>
-      <!--<el-pagination
-        background
-        hide-on-single-page
-        layout="prev, pager, next"
-        :current-page="currentPage"
-        :page-size="limit"
-        :total="pageTotal"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      >
-      </el-pagination>-->
-      <pagination :total="pageTotal" :limit="limit" :current-page="currentPage" @pagination="handlePlayListComment"></pagination>
+      <pagination :total="pageTotal" :limit="limit" @pagination="handlePlayListComment"></pagination>
     </div>
 </template>
 
@@ -37,14 +26,13 @@ export default {
       hotComments: [],
       pageTotal: 0,
       limit: 16,
-      offset: 0,
-      currentPage: 0
+      offset: 0
     })
-    const handlePlayListComment = async () => {
+    const handlePlayListComment = async (query) => {
       const params = {
         id: route.query.id,
-        limit: state.limit,
-        offset: state.offset
+        limit: query !== undefined ? query.limit : state.limit,
+        offset: query !== undefined ? query.offset : state.offset
       }
       const commentData = await getPlayListComment(params)
       state.comments = commentData.comments

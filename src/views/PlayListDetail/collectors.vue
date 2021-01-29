@@ -1,17 +1,7 @@
 <template>
     <div class="collectors-module">
       <collectors-list :collectors-list="collectorsList" v-if="collectorsList.length>0"></collectors-list>
-      <el-pagination
-        background
-        hide-on-single-page
-        layout="prev, pager, next"
-        :current-page="currentPage"
-        :page-size="limit"
-        :total="pageTotal"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      >
-      </el-pagination>
+      <pagination :total="pageTotal" :limit="limit" @pagination="handlePlayListSubscribers"></pagination>
     </div>
 </template>
 
@@ -20,33 +10,27 @@ import { useRoute } from 'vue-router'
 import { onMounted, reactive, toRefs } from 'vue'
 import { getPlayListSubscribers } from '../../api'
 import CollectorsList from '../../components/CollectorsList/CollectorsList'
+import Pagination from '../../components/Pagination/Pagination'
 export default {
   name: 'collectors',
-  components: { CollectorsList },
+  components: {
+    Pagination,
+    CollectorsList
+  },
   setup () {
     const route = useRoute()
     const state = reactive({
       collectorsList: [],
       pageTotal: 0,
-      limit: 20,
+      limit: 40,
       offset: 0,
       currentPage: 0
     })
-    const handleSizeChange = (val) => {
-      state.limit = val
-      state.offset = state.limit * state.currentPage
-      _getPlayListSubscribers()
-    }
-    const handleCurrentChange = (val) => {
-      state.currentPage = val
-      state.offset = (val - 1) * state.limit
-      _getPlayListSubscribers()
-    }
-    const _getPlayListSubscribers = async () => {
+    const handlePlayListSubscribers = async (query) => {
       const params = {
         id: route.query.id,
-        limit: state.limit,
-        offset: state.offset
+        limit: query !== undefined ? query.limit : state.limit,
+        offset: query !== undefined ? query.offset : state.offset
       }
       const collectorsListData = await getPlayListSubscribers(params)
       state.collectorsList = collectorsListData.subscribers
@@ -55,11 +39,10 @@ export default {
       console.log('collectorsList', collectorsListData.subscribers)
     }
     onMounted(async () => {
-      await _getPlayListSubscribers()
+      await handlePlayListSubscribers()
     })
     return {
-      handleSizeChange,
-      handleCurrentChange,
+      handlePlayListSubscribers,
       ...toRefs(state)
     }
   }

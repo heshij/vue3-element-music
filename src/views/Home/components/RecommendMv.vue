@@ -5,7 +5,9 @@
       <ul class="recommend-mv-container" v-if="recommendMvList.length>0">
         <li v-for="item in recommendMvList" :key="item.id" @click="selectItem(item)">
           <span class="count"><i class="icon-play"></i> {{$filters.tranNumber(item.playCount, 0)}}</span>
-          <el-image :src="item.picUrl+ '?param=356y200'" lazy></el-image>
+          <div class="img-wrap">
+            <el-image :src="item.picUrl+ '?param=356y200'" lazy></el-image>
+          </div>
           <p>{{item.name}}</p>
         </li>
       </ul>
@@ -68,9 +70,21 @@ export default {
         position: relative;
         overflow: hidden;
         cursor: pointer;
-        ::v-deep .el-image{
-          border-radius: 4px;
-          border: 1px solid $--border-color-base;
+        .img-wrap {
+          position: relative;
+          width: 100%;
+          height: 0;
+          padding-bottom: 100%;
+          overflow: hidden;
+          ::v-deep .el-image{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            border: 1px solid $--border-color-base;
+          }
         }
         p {
           width: 100%;

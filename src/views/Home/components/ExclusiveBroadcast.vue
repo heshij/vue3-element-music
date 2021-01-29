@@ -5,7 +5,9 @@
         <ul class="exclusive-broadcast-container" v-if="personalizedList.length>0">
           <li v-for="item in personalizedList" :key="item.id" @click="selectItem(item)">
             <i class="icon-play"></i>
-            <el-image :src="item.sPicUrl+ '?param=356y200'" lazy></el-image>
+            <div class="img-wrap">
+              <el-image :src="item.sPicUrl+ '?param=356y200'" lazy></el-image>
+            </div>
             <p>{{item.name}}</p>
           </li>
         </ul>

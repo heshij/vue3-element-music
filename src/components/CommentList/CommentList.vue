@@ -137,6 +137,7 @@ export default {
                   font-weight: lighter;
                   font-size: $--font-size-small;
                   vertical-align: middle;
+                  line-height: 17px;
                 }
               }
             }
