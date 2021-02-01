@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createStore, createLogger } from 'vuex'
 import getters from './getters'
 // import songs from './modules/songs'
 const files = require.context('./modules', false, /\.js$/)
@@ -13,5 +13,6 @@ Object.keys(modules).forEach(key => {
 })
 export default createStore({
   getters,
-  modules
+  modules,
+  plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []
 })
