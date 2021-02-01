@@ -34,6 +34,7 @@ export default {
     width: 200px;
     height: 100%;
     padding-top: 60px;
+    padding-bottom: 72px;
     background-color: $--color-white;
     border-right: 1px solid $--border-color-base;
     .sidebar-list {

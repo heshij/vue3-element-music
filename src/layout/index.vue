@@ -5,14 +5,17 @@
       <div class="main-container">
         <app-main/>
       </div>
+      <player-bar></player-bar>
     </div>
 </template>
 
 <script>
 import { AppHeader, Sidebar, AppMain } from './components'
+import PlayerBar from '../components/PlayerBar/PlayerBar'
 export default {
   name: 'layout',
   components: {
+    PlayerBar,
     AppMain,
     AppHeader,
     Sidebar
@@ -31,7 +34,7 @@ export default {
       transition: margin-left 0.28s;
       margin-left: 200px;
       position: relative;
-      padding: 60px 20px 0;
+      padding: 60px 20px 72px;
     }
   }
 </style>
