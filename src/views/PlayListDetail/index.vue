@@ -87,8 +87,8 @@ export default {
       const detailData = await getPlayListDetail(id, 8)
       state.detail = detailData.playlist
       state.creator = detailData.playlist.creator
-      console.log('detail:', detailData.playlist)
-      console.log('creator:', detailData.playlist.creator)
+      // console.log('detail:', detailData.playlist)
+      // console.log('creator:', detailData.playlist.creator)
     }
     onMounted(() => {
       const id = route.query.id

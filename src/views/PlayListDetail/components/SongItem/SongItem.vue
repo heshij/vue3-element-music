@@ -17,13 +17,16 @@
               <span class="album-name">专辑</span>
               <span class="song-time">时长</span>
             </li>
-            <li @click="selectItem" v-for="(item, index) in songList" :key="item.id">
+            <li v-for="(item, index) in songList"
+                :key="item.id"
+                :class="index == currentIndex && currentSong.id == item.id && playing ? 'playing' : ''"
+            >
               <span class="sort-num">{{index + 1}}</span>
               <div class="icon-wrapper">
                 <i class="icon-like"></i>
                 <i class="icon-download"></i>
               </div>
-              <span class="song-name" :title="item.name">{{item.name}}</span>
+              <span class="song-name" :title="item.name" @click="playSong(item, index)">{{item.name}}</span>
               <span class="singer-name" :title="item.singer">{{item.singer}}</span>
               <span class="album-name" :title="item.album">{{item.album}}</span>
               <span class="song-time">{{$filters.formatSecondTime(item.duration)}}</span>
@@ -35,6 +38,10 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore, createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('songs')
+
 export default {
   name: 'SongItem',
   props: {
@@ -48,12 +55,26 @@ export default {
     }
   },
   setup (props, ctx) {
-    const selectItem = () => {
-      ctx.emit('selectItem')
+    const store = useStore()
+    const getters = mapGetters(['playing', 'currentIndex', 'currentSong'])
+    const playing = computed(getters.playing.bind({ $store: store }))
+    const currentIndex = computed(getters.currentIndex.bind({ $store: store }))
+    const currentSong = computed(getters.currentSong.bind({ $store: store }))
+    const actions = mapActions(['selectPlay', 'saveHistoryList'])
+    const selectPlay = actions.selectPlay.bind({ $store: store })
+    const playSong = (item, index) => {
+      // console.log('currentSong:', currentSong.value)
+      selectPlay({
+        list: props.songList,
+        index
+      })
     }
     return {
       props,
-      selectItem
+      playSong,
+      playing,
+      currentIndex,
+      currentSong
     }
   }
 }
@@ -74,6 +95,9 @@ export default {
     line-height: 34px;
     font-size: $--font-size-base;
     color: #656565;
+    &.playing span{
+      color: $theme-color;
+    }
     &:first-child:hover {
       background-color: $--color-white;
     }
@@ -110,6 +134,7 @@ export default {
       flex: 1;
       color: $--color-text-base;
       @include itemBox;
+      cursor: pointer;
     }
     .singer-name {
       width: 30%;

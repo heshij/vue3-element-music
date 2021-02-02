@@ -1,6 +1,6 @@
 <template>
     <div class="songs-module">
-      <song-item :song-list="songList" :loading="loading" @selectItem="selectItem"></song-item>
+      <song-item :song-list="songList" :loading="loading"></song-item>
     </div>
 </template>
 
@@ -14,9 +14,6 @@ export default {
   name: 'songs',
   components: { SongItem },
   setup () {
-    const selectItem = () => {
-      // console.log('selectItem')
-    }
     const route = useRoute()
     const state = reactive({
       loading: true,
@@ -49,7 +46,7 @@ export default {
       const trackIds = normalizedTrackIds(list)
       const songListData = await getSongDetail(trackIds)
       state.songList = normalizedSongs(songListData.songs)
-      console.log('songList:', state.songList)
+      // console.log('songList:', state.songList)
     }
     onMounted(() => {
       state.loading = true
@@ -58,7 +55,6 @@ export default {
       state.loading = false
     })
     return {
-      selectItem,
       ...toRefs(state)
     }
   }
