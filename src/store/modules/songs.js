@@ -1,6 +1,6 @@
 import { playMode } from '../../utils/playConfig'
-import { saveHistory, clearHistory, deleteHistory } from '../../utils/cache'
 import { shuffle } from '../../utils/utils'
+import { saveHistory, clearHistory, deleteHistory } from '../../utils/cache'
 
 const state = {
   // 播放状态

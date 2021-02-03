@@ -42,8 +42,8 @@
         </ul>
       </div>
     </div>
-    <div class="playlist-main" v-if="detail.id>0">
-      <div class="second-level-nav">
+    <div class="playlist-main">
+      <div class="second-level-nav" v-if="detail.id>0">
         <ul>
           <li @click="routeJump('songs')"><router-link to="/playlistDetail/songs">歌曲列表</router-link></li>
           <li @click="routeJump('comment')"><router-link to="/playlistDetail/comment">评论({{$filters.tranNumber(detail.commentCount, 1)}})</router-link></li>

@@ -63,7 +63,6 @@ export default {
     const actions = mapActions(['selectPlay', 'saveHistoryList'])
     const selectPlay = actions.selectPlay.bind({ $store: store })
     const playSong = (item, index) => {
-      // console.log('currentSong:', currentSong.value)
       selectPlay({
         list: props.songList,
         index

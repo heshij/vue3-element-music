@@ -2,7 +2,7 @@
     <div class="player-bar-wrapper" v-if="getters.currentSong.id !== undefined">
       <div class="song-info">
         <div class="img-wrap">
-          <el-image :src="getters.currentSong.image" lazy>
+          <el-image :src="getters.currentSong.image + '?param=60y60'" lazy>
             <template #placeholder>
               <div class="image-slot">
                 <i class="el-icon-picture-outline"></i>
@@ -19,9 +19,16 @@
         <div class="icon-wrap">
           <span class="icon-loop"></span>
           <span class="icon-upper"></span>
-          <span :class="playIcon" @click="togglePlaying"></span>
+          <span class="big-icon" :class="playIcon" @click="togglePlaying"></span>
           <span class="icon-lower"></span>
           <span class="font-ci">词</span>
+        </div>
+        <div class="progress-wrap">
+          <span class="current-time">{{$filters.formatSecondTime(currentTime)}}</span>
+          <div class="progress-bar">
+            <el-slider v-model="percent" @change="onPercentBarChange" :show-tooltip="false"></el-slider>
+          </div>
+          <span class="duration-time">{{$filters.formatSecondTime(getters.currentSong.duration)}}</span>
         </div>
       </div>
       <div class="song-list">
@@ -31,27 +38,28 @@
         ref="audio"
         :src="getters.currentSong.url"
         @playing="audioReady"
+        @pause="audioPaused"
         @error="audioError"
         @ended="audioEnd"
-        @pause="audioPaused"
+        @timeupdate="updateTime"
       ></audio>
     </div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import { ref, onMounted, computed, nextTick, reactive, toRefs, watch } from 'vue'
-// eslint-disable-next-line no-unused-vars
-import { createNamespacedHelpers, useStore } from 'vuex'
-// eslint-disable-next-line no-unused-vars
-const { mapGetters, mapState, mapActions } = createNamespacedHelpers('songs')
+import { useStore } from 'vuex'
 export default {
   name: 'PlayerBar',
   setup () {
     const state = reactive({
       songReady: false,
+      currentTime: 0,
+      percent: 1,
       id: ''
     })
+    const audio = ref(null)
+    onMounted(() => audio)
     const store = useStore()
     const getters = computed(() => {
       return {
@@ -76,6 +84,14 @@ export default {
     const audioReady = () => {
       state.songReady = true
     }
+    // 监听播放时间改变
+    const updateTime = (e) => {
+      state.currentTime = e.target.currentTime
+      state.percent = state.currentTime / getters.value.currentSong.duration * 100
+      console.log('state.currentTime:', state.currentTime)
+      console.log('getters.value.currentSong.duration:', getters.value.currentSong.duration)
+      console.log('state.percent:', state.percent)
+    }
     // 歌曲暂停
     const audioPaused = () => {
       store.commit('songs/SET_PLAYING_STATE', false)
@@ -85,25 +101,49 @@ export default {
       state.songReady = true
     }
     // 歌曲播放完成
-    const audioEnd = () => {}
-    const audio = ref(null)
-    onMounted(() => audio)
-    watch(() => getters.value.currentSong, (newSong, oldSong) => {
-      console.log(`原值为${newSong}`)
-      console.log(`新值为${oldSong}`)
-      if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
-        return
+    const audioEnd = () => {
+      state.currentTime = 0
+    }
+    // 进度条拖动改变播放进度
+    const onPercentBarChange = (percent) => {
+      const currentTime = getters.value.currentSong.duration * (percent / 100)
+      state.currentTime = audio.value.currentTime = currentTime
+      if (!getters.value.playing) {
+        togglePlaying()
       }
-      state.songReady = false
-      nextTick(() => {
-        const _audio = audio.value
-        console.log(_audio)
-        if (_audio) {
-          _audio.src = newSong.url
-          _audio.play()
-          state.id = newSong.id
+    }
+    watch([() => getters.value.currentSong, () => getters.value.playing], ([newSong, newPlaying], [oldSong, oldPlaying]) => {
+      const watchCurrentSong = () => {
+        if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
+          return
         }
-      })
+        state.songReady = false
+        nextTick(() => {
+          const _audio = audio.value
+          if (_audio) {
+            console.log('newCurrentSong:', newSong)
+            console.log('oldCurrentSong:', oldSong)
+            _audio.src = newSong.url
+            _audio.play()
+            state.id = newSong.id
+          }
+        })
+      }
+      const watchPlaying = () => {
+        if (!state.songReady) {
+          return
+        }
+        nextTick(() => {
+          const _audio = audio.value
+          if (_audio) {
+            console.log('newPlaying:', newPlaying)
+            console.log('oldPlaying:', oldPlaying)
+            newPlaying ? _audio.play() : _audio.pause()
+          }
+        })
+      }
+      watchCurrentSong()
+      watchPlaying()
     })
     return {
       ...toRefs(state),
@@ -112,9 +152,11 @@ export default {
       audio,
       togglePlaying,
       audioReady,
+      updateTime,
       audioError,
       audioEnd,
-      audioPaused
+      audioPaused,
+      onPercentBarChange
     }
   }
 }
@@ -138,6 +180,7 @@ export default {
     background-color: #f6f6f8;
     border-top: 1px solid $--border-color-base;
     .song-info {
+      width: 30%;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -171,20 +214,65 @@ export default {
         }
       }
     }
-    .icon-wrap {
+    .song-handel {
+      max-width: 420px;
+      min-width: 420px;
       display: flex;
-      justify-content: flex-start;
-      span {
-        font-size: $--font-size-extra-large;
-        color: $--color-text-base;
-        margin: 0 12px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      flex: 1;
+      .icon-wrap {
+        width: 100%;
         display: flex;
-        align-items: center;
-        cursor: pointer;
-        &.font-ci {
-          font-size: 15px;
+        justify-content: center;
+        span {
+          font-size: $--font-size-extra-large;
+          color: $--color-text-base;
+          margin: 0 12px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          &.font-ci {
+            font-size: 15px;
+          }
+          &.big-icon {
+            font-size: 40px;
+          }
+          &:hover {
+            color: $theme-color;
+          }
         }
       }
+      .progress-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: $--font-size-extra-small;
+        color: $--color-text-base;
+        .progress-bar {
+          flex: 1;
+          padding: 0 16px;
+          ::v-deep .el-slider__runway {
+            margin: 2px 0;
+            .el-slider__bar {
+              background-color: $theme-color;
+            }
+          }
+          ::v-deep .el-slider__button {
+            width: 14px;
+            height: 14px;
+            border-color: $theme-color;
+          }
+        }
+      }
+    }
+    .song-list {
+      width: 30%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
     }
   }
 </style>

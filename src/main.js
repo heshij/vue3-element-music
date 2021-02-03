@@ -6,7 +6,7 @@ import './styles/index.scss'
 import installElementPlus from './plugins/element.js'
 import router from './router'
 import store from './store'
-import { tranNumber, dateFormat, formatSecondTime } from './utils/utils'
+import { tranNumber, dateFormat, formatSecondTime, formatTime } from './utils/utils'
 const app = createApp(App)
 installElementPlus(app)
 app.use(router)
@@ -15,6 +15,7 @@ app.use(store)
 app.config.globalProperties.$filters = {
   tranNumber,
   dateFormat,
-  formatSecondTime
+  formatSecondTime,
+  formatTime
 }
 app.mount('#app')
