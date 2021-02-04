@@ -17,10 +17,10 @@
       </div>
       <div class="song-handel">
         <div class="icon-wrap">
-          <span class="icon-loop"></span>
-          <span class="icon-upper"></span>
+          <span :class="modeIcon" @click="changeMode"></span>
+          <span class="icon-upper" @click="prevSong"></span>
           <span class="big-icon" :class="playIcon" @click="togglePlaying"></span>
-          <span class="icon-lower"></span>
+          <span class="icon-lower" @click="nextSong"></span>
           <span class="font-ci">词</span>
         </div>
         <div class="progress-wrap">
@@ -49,13 +49,16 @@
 <script>
 import { ref, onMounted, computed, nextTick, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
+import { playMode } from '../../utils/playConfig'
+import { shuffle } from '../../utils/utils'
+
 export default {
   name: 'PlayerBar',
   setup () {
     const state = reactive({
       songReady: false,
       currentTime: 0,
-      percent: 1,
+      percent: 0,
       id: ''
     })
     const audio = ref(null)
@@ -72,13 +75,78 @@ export default {
         historyList: store.getters['songs/historyList']
       }
     })
+    // 播放暂停按钮
     const playIcon = computed(() => getters.value.playing ? 'icon-stop' : 'icon-play')
+    // 播放模式按钮
+    const modeIcon = computed(() => getters.value.mode === playMode.sequence
+      ? 'icon-loop'
+      : getters.value.mode === playMode.loop
+        ? 'icon-singles'
+        : 'icon-random')
     // 点击播放暂停
     const togglePlaying = () => {
       if (!state.songReady) {
         return
       }
       store.commit('songs/SET_PLAYING_STATE', !getters.value.playing)
+    }
+    // 改变播放模式
+    const changeMode = () => {
+      const mode = (getters.value.mode + 1) % 3
+      store.commit('songs/SET_PLAY_MODE', mode)
+      let list
+      mode === playMode.random ? list = shuffle(getters.value.sequenceList) : list = getters.value.sequenceList
+      resetCurrentIndex(list)
+      store.commit('songs/SET_PLAYLIST', list)
+    }
+    // 重置播放索引
+    const resetCurrentIndex = (list) => {
+      const index = list.findIndex(item => {
+        return item.id === getters.value.currentSong.id
+      })
+      store.commit('songs/SET_CURRENT_INDEX', index)
+    }
+    // 上一首
+    const prevSong = () => {
+      if (!state.songReady) {
+        return
+      }
+      if (getters.value.playList.length === 1) {
+        singlesLoop()
+      } else {
+        let index = getters.value.currentIndex - 1
+        if (index === -1) {
+          index = getters.value.playList.length - 1
+        }
+        store.commit('songs/SET_CURRENT_INDEX', index)
+        if (!getters.value.playing) {
+          togglePlaying()
+        }
+      }
+    }
+    // 下一首
+    const nextSong = () => {
+      if (!state.songReady) {
+        return
+      }
+      if (getters.value.playList.length === 1) {
+        singlesLoop()
+      } else {
+        let index = getters.value.currentIndex + 1
+        if (index === getters.value.playList.length) {
+          index = 0
+        }
+        store.commit('songs/SET_CURRENT_INDEX', index)
+        if (!getters.value.playing) {
+          togglePlaying()
+        }
+      }
+    }
+    // 单曲循环
+    const singlesLoop = () => {
+      audio.value.currentTime = 0
+      audio.value.play()
+      store.commit('songs/SET_PLAYING_STATE', true)
     }
     // 播放准备完成
     const audioReady = () => {
@@ -88,9 +156,9 @@ export default {
     const updateTime = (e) => {
       state.currentTime = e.target.currentTime
       state.percent = state.currentTime / getters.value.currentSong.duration * 100
-      console.log('state.currentTime:', state.currentTime)
-      console.log('getters.value.currentSong.duration:', getters.value.currentSong.duration)
-      console.log('state.percent:', state.percent)
+      // console.log('state.currentTime:', state.currentTime)
+      // console.log('getters.value.currentSong.duration:', getters.value.currentSong.duration)
+      // console.log('state.percent:', state.percent)
     }
     // 歌曲暂停
     const audioPaused = () => {
@@ -103,6 +171,7 @@ export default {
     // 歌曲播放完成
     const audioEnd = () => {
       state.currentTime = 0
+      getters.value.mode === playMode.loop ? singlesLoop() : nextSong()
     }
     // 进度条拖动改变播放进度
     const onPercentBarChange = (percent) => {
@@ -149,8 +218,13 @@ export default {
       ...toRefs(state),
       getters,
       playIcon,
+      modeIcon,
       audio,
       togglePlaying,
+      changeMode,
+      prevSong,
+      nextSong,
+      singlesLoop,
       audioReady,
       updateTime,
       audioError,
@@ -237,7 +311,7 @@ export default {
             font-size: 15px;
           }
           &.big-icon {
-            font-size: 40px;
+            font-size: 32px;
           }
           &:hover {
             color: $theme-color;

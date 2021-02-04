@@ -50,6 +50,7 @@ const mutations = {
   SET_CURRENT_INDEX: (state, index) => {
     state.currentIndex = index
   },
+  // 历史播放列表
   SET_HISTORY_LIST: (state, list) => {
     state.historyList = list
   }
@@ -58,7 +59,7 @@ const mutations = {
 const actions = {
   // 选择播放
   selectPlay ({ commit, state }, { list, index }) {
-    commit('SET_PLAYLIST', list)
+    commit('SET_SEQUENCE_LIST', list)
     if (state.mode === playMode.random) {
       const randomList = shuffle(list)
       commit('SET_PLAYLIST', randomList)
