@@ -21,6 +21,7 @@ export default {
     })
     const normalizedTrackIds = (list) => {
       const ret = []
+      // eslint-disable-next-line array-callback-return
       list.map(item => {
         if (item.id) {
           ret.push(item.id)
@@ -30,6 +31,7 @@ export default {
     }
     const normalizedSongs = (list) => {
       const ret = []
+      // eslint-disable-next-line array-callback-return
       list.map(item => {
         if (item.id) {
           ret.push(createSong(item))

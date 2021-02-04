@@ -48,8 +48,6 @@ function filterSinger (singer) {
   if (!singer) {
     return ''
   }
-  singer.map(item => {
-    ret.push(item.name)
-  })
+  singer.map(item => ret.push(item.name))
   return ret.join(' / ')
 }

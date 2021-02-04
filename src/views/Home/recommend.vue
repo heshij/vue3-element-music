@@ -37,9 +37,9 @@ export default {
       recommendMvList: [],
       recommendRadioList: []
     })
-    // eslint-disable-next-line no-unused-vars
     const normalizedSongs = (list) => {
       const ret = []
+      // eslint-disable-next-line array-callback-return
       list.map(item => {
         if (item.id) {
           ret.push(createSong(item.song))

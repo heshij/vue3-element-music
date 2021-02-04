@@ -27,17 +27,17 @@ export function tranNumber (num, point) {
 export function formatTime (time) {
   // 取整
   time = ~~time
-  var formatTime
+  let formatTime
   if (time < 10) {
     formatTime = '00:0' + time
   } else if (time < 60) {
     formatTime = '00:' + time
   } else {
-    var m = ~~parseInt((time % (1000 * 60 * 60)) / (1000 * 60))
+    let m = ~~parseInt((time % (1000 * 60 * 60)) / (1000 * 60))
     if (m < 10) {
       m = '0' + m
     }
-    var s = ~~parseInt((time % (1000 * 60)) / 1000)
+    let s = ~~parseInt((time % (1000 * 60)) / 1000)
     if (s < 10) {
       s = '0' + s
     }
@@ -50,14 +50,14 @@ export function formatTime (time) {
 export function formatSecond (time) {
   // 取整
   time = ~~time
-  var secondTime
+  let secondTime
   if (time < 10) {
     secondTime = '00:0' + time
   } else if (time < 60) {
     secondTime = '00:' + time
   } else {
-    var m = ~~parseInt((time % (1000 * 60 * 60)) / (1000 * 60))
-    var s = ~~parseInt((time % (1000 * 60)) / 1000)
+    const m = ~~parseInt((time % (1000 * 60 * 60)) / (1000 * 60))
+    const s = ~~parseInt((time % (1000 * 60)) / 1000)
     secondTime = Number(m * 60 + s)
   }
   return secondTime
