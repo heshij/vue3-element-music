@@ -19,7 +19,7 @@
             </li>
             <li v-for="(item, index) in songList"
                 :key="item.id"
-                :class="index == currentIndex && currentSong.id == item.id && playing ? 'playing' : ''"
+                :class="currentIndex && currentSong.id === item.id && playing ? 'playing' : ''"
             >
               <span class="sort-num">{{index + 1}}</span>
               <div class="icon-wrapper">
@@ -62,6 +62,8 @@ export default {
     const currentSong = computed(getters.currentSong.bind({ $store: store }))
     const actions = mapActions(['selectPlay', 'saveHistoryList'])
     const selectPlay = actions.selectPlay.bind({ $store: store })
+    console.log('currentIndex:', currentIndex.value)
+    console.log('currentSong:', currentSong.value.id)
     const playSong = (item, index) => {
       selectPlay({
         list: props.songList,
