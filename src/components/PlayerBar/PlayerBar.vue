@@ -21,7 +21,7 @@
           <span class="icon-upper" @click="prevSong"></span>
           <span class="big-icon" :class="playIcon" @click="togglePlaying"></span>
           <span class="icon-lower" @click="nextSong"></span>
-          <span class="font-ci">词</span>
+          <span class="font-ci icon-ci"></span>
         </div>
         <div class="progress-wrap">
           <span class="current-time">{{$filters.formatSecondTime(currentTime)}}</span>
@@ -32,6 +32,10 @@
         </div>
       </div>
       <div class="song-list">
+        <div class="volume-wrap">
+          <span :class="muteIcon" @click="changeMuted"></span>
+          <el-slider v-model="volumeNum" @change="changeVolume" :show-tooltip="false"></el-slider>
+        </div>
         <span class="icon-list"></span>
       </div>
       <audio
@@ -42,6 +46,7 @@
         @error="audioError"
         @ended="audioEnd"
         @timeupdate="updateTime"
+        :muted="isMuted"
       ></audio>
     </div>
 </template>
@@ -59,7 +64,10 @@ export default {
       songReady: false,
       currentTime: 0,
       percent: 0,
-      id: ''
+      id: '',
+      isMuted: false,
+      volume: 0.5,
+      volumeNum: 50
     })
     const audio = ref(null)
     onMounted(() => audio)
@@ -83,6 +91,8 @@ export default {
       : getters.value.mode === playMode.loop
         ? 'icon-singles'
         : 'icon-random')
+    // 音量按钮
+    const muteIcon = computed(() => state.isMuted ? 'icon-mute' : 'icon-voice')
     // 点击播放暂停
     const togglePlaying = () => {
       if (!state.songReady) {
@@ -181,6 +191,22 @@ export default {
         togglePlaying()
       }
     }
+    // 控制静音
+    const changeMuted = () => {
+      if (state.isMuted) {
+        state.isMuted = false
+        audio.value.muted = false
+      } else {
+        state.isMuted = true
+        audio.value.muted = true
+      }
+    }
+    // 改变音量
+    const changeVolume = (volume) => {
+      state.volumeNum = volume
+      // audio.value.volume 取值 [0,1]
+      audio.value.volume = volume / 100
+    }
     watch([() => getters.value.currentSong, () => getters.value.playing], ([newSong, newPlaying], [oldSong, oldPlaying]) => {
       const watchCurrentSong = () => {
         if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
@@ -193,6 +219,7 @@ export default {
             console.log('newCurrentSong:', newSong)
             console.log('oldCurrentSong:', oldSong)
             _audio.src = newSong.url
+            _audio.volume = state.volume
             _audio.play()
             state.id = newSong.id
           }
@@ -219,6 +246,7 @@ export default {
       getters,
       playIcon,
       modeIcon,
+      muteIcon,
       audio,
       togglePlaying,
       changeMode,
@@ -230,7 +258,9 @@ export default {
       audioError,
       audioEnd,
       audioPaused,
-      onPercentBarChange
+      onPercentBarChange,
+      changeMuted,
+      changeVolume
     }
   }
 }
@@ -308,7 +338,8 @@ export default {
           align-items: center;
           cursor: pointer;
           &.font-ci {
-            font-size: 15px;
+            font-size: 20px;
+            font-weight: lighter;
           }
           &.big-icon {
             font-size: 32px;
@@ -347,6 +378,32 @@ export default {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      font-size: 20px;
+      span {
+        cursor: pointer;
+      }
+      .volume-wrap {
+        width: 150px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-right: 12px;
+        .el-slider {
+          width: 100%;
+          margin: 0 4px;
+          ::v-deep .el-slider__runway {
+            margin: 2px 0;
+            .el-slider__bar {
+              background-color: $theme-color;
+            }
+          }
+          ::v-deep .el-slider__button {
+            width: 14px;
+            height: 14px;
+            border-color: $theme-color;
+          }
+        }
+      }
     }
   }
 </style>
