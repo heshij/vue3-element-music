@@ -48,6 +48,7 @@
         @timeupdate="updateTime"
         :muted="isMuted"
       ></audio>
+      <playlist-sidebar></playlist-sidebar>
     </div>
 </template>
 
@@ -56,9 +57,11 @@ import { ref, onMounted, computed, nextTick, reactive, toRefs, watch } from 'vue
 import { useStore } from 'vuex'
 import { playMode } from '../../utils/playConfig'
 import { shuffle } from '../../utils/utils'
+import PlaylistSidebar from '../PlaylistSidebar/PlaylistSidebar'
 
 export default {
   name: 'PlayerBar',
+  components: { PlaylistSidebar },
   setup () {
     const state = reactive({
       songReady: false,

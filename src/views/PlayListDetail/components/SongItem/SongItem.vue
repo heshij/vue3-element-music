@@ -19,7 +19,7 @@
             </li>
             <li v-for="(item, index) in songList"
                 :key="item.id"
-                :class="currentIndex && currentSong.id === item.id && playing ? 'playing' : ''"
+                :class="currentSong.id === item.id && playing ? 'playing' : ''"
             >
               <span class="sort-num">{{index + 1}}</span>
               <div class="icon-wrapper">
