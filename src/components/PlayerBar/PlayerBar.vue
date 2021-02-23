@@ -1,55 +1,55 @@
 <template>
-    <div class="player-bar-wrapper" v-if="getters.currentSong.id !== undefined">
-      <div class="song-info">
-        <div class="img-wrap">
-          <el-image :src="getters.currentSong.image + '?param=60y60'" lazy>
-            <template #placeholder>
-              <div class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </template>
-          </el-image>
-        </div>
-        <div class="text-wrap">
-          <h4>{{ getters.currentSong.name }}<span class="icon-like"></span></h4>
-          <span>{{ getters.currentSong.singer }}</span>
-        </div>
+  <div class="player-bar-wrapper" v-if="getters.currentSong.id !== undefined">
+    <div class="song-info">
+      <div class="img-wrap">
+        <el-image :src="getters.currentSong.image + '?param=60y60'" lazy>
+          <template #placeholder>
+            <div class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </template>
+        </el-image>
       </div>
-      <div class="song-handel">
-        <div class="icon-wrap">
-          <span :class="modeIcon" @click="changeMode"></span>
-          <span class="icon-upper" @click="prevSong"></span>
-          <span class="big-icon" :class="playIcon" @click="togglePlaying"></span>
-          <span class="icon-lower" @click="nextSong"></span>
-          <span class="font-ci icon-ci"></span>
-        </div>
-        <div class="progress-wrap">
-          <span class="current-time">{{$filters.formatSecondTime(currentTime)}}</span>
-          <div class="progress-bar">
-            <el-slider v-model="percent" @change="onPercentBarChange" :show-tooltip="false"></el-slider>
-          </div>
-          <span class="duration-time">{{$filters.formatSecondTime(getters.currentSong.duration)}}</span>
-        </div>
+      <div class="text-wrap">
+        <h4>{{ getters.currentSong.name }}<span class="icon-like"></span></h4>
+        <span>{{ getters.currentSong.singer }}</span>
       </div>
-      <div class="song-list">
-        <div class="volume-wrap">
-          <span :class="muteIcon" @click="changeMuted"></span>
-          <el-slider v-model="volumeNum" @change="changeVolume" :show-tooltip="false"></el-slider>
-        </div>
-        <span class="icon-list"></span>
-      </div>
-      <audio
-        ref="audio"
-        :src="getters.currentSong.url"
-        @playing="audioReady"
-        @pause="audioPaused"
-        @error="audioError"
-        @ended="audioEnd"
-        @timeupdate="updateTime"
-        :muted="isMuted"
-      ></audio>
-      <playlist-sidebar></playlist-sidebar>
     </div>
+    <div class="song-handel">
+      <div class="icon-wrap">
+        <span :class="modeIcon" @click="changeMode"></span>
+        <span class="icon-upper" @click="prevSong"></span>
+        <span class="big-icon" :class="playIcon" @click="togglePlaying"></span>
+        <span class="icon-lower" @click="nextSong"></span>
+        <span class="font-ci icon-ci"></span>
+      </div>
+      <div class="progress-wrap">
+        <span class="current-time">{{$filters.formatSecondTime(currentTime)}}</span>
+        <div class="progress-bar">
+          <el-slider v-model="percent" @change="onPercentBarChange" :show-tooltip="false"></el-slider>
+        </div>
+        <span class="duration-time">{{$filters.formatSecondTime(getters.currentSong.duration)}}</span>
+      </div>
+    </div>
+    <div class="song-list">
+      <div class="volume-wrap">
+        <span :class="muteIcon" @click="changeMuted"></span>
+        <el-slider v-model="volumeNum" @change="changeVolume" :show-tooltip="false"></el-slider>
+      </div>
+      <span class="icon-list" @click="handleShowPlaylist"></span>
+    </div>
+    <audio
+      ref="audio"
+      :src="getters.currentSong.url"
+      @playing="audioReady"
+      @pause="audioPaused"
+      @error="audioError"
+      @ended="audioEnd"
+      @timeupdate="updateTime"
+      :muted="isMuted"
+    ></audio>
+  </div>
+  <playlist-sidebar :is-show="showSidebar" :song-list="getters.playList"></playlist-sidebar>
 </template>
 
 <script>
@@ -70,7 +70,8 @@ export default {
       id: '',
       isMuted: false,
       volume: 0.5,
-      volumeNum: 50
+      volumeNum: 50,
+      showSidebar: false
     })
     const audio = ref(null)
     onMounted(() => audio)
@@ -210,6 +211,9 @@ export default {
       // audio.value.volume 取值 [0,1]
       audio.value.volume = volume / 100
     }
+    const handleShowPlaylist = () => {
+      state.showSidebar = !state.showSidebar
+    }
     watch([() => getters.value.currentSong, () => getters.value.playing], ([newSong, newPlaying], [oldSong, oldPlaying]) => {
       const watchCurrentSong = () => {
         if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
@@ -263,7 +267,8 @@ export default {
       audioPaused,
       onPercentBarChange,
       changeMuted,
-      changeVolume
+      changeVolume,
+      handleShowPlaylist
     }
   }
 }

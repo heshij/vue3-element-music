@@ -1,13 +1,13 @@
 <template>
-    <div class="playlist-sidebar--wrapper">
+    <div class="playlist-sidebar--wrapper" v-show="isShow">
       <div class="sidebar-container">
         <div class="sidebar__header">
-          <span>播放列表</span>
+          <span class="active">播放列表</span>
           <span>历史记录</span>
         </div>
         <div class="sidebar__main--wrapper">
           <div class="sidebar__main--handle">
-            <span>总120首</span>
+            <span>总{{songList.length}}首</span>
             <div class="handle-wrapper">
               <span><i class="el-icon-folder-add"></i>收藏全部</span>
               <span><i class="el-icon-delete"></i>清空</span>
@@ -15,11 +15,13 @@
           </div>
           <div class="sidebar__main--list">
             <ul class="playlist-wrapper">
-              <li>
-                <span class="song-name">音乐标题</span>
-                <span class="singer-name">歌手</span>
-                <span class="album-name el-icon-link">专辑</span>
-                <span class="song-time">时长</span>
+              <li v-for="item in songList"
+                  :key="item.id"
+              >
+                <span class="song-name" :title="item.name">{{item.name}}</span>
+                <span class="singer-name" :title="item.singer">{{item.singer}}</span>
+                <span class="album-name el-icon-link" :title="item.album"></span>
+                <span class="song-time">{{$filters.formatSecondTime(item.duration)}}</span>
               </li>
             </ul>
           </div>
@@ -30,7 +32,21 @@
 
 <script>
 export default {
-  name: 'PlaylistSidebar'
+  name: 'PlaylistSidebar',
+  props: {
+    isShow: {
+      type: Boolean,
+      default: false
+    },
+    songList: {
+      type: Array,
+      default: () => []
+    }
+  },
+  setup (props) {
+    console.log(props.songList)
+    return {}
+  }
 }
 </script>
 
@@ -52,6 +68,30 @@ export default {
       padding: 0 18px;
       background-color: $--color-white;
       box-shadow: -4px -1px 8px rgba(0,0,0,.1);
+      overflow: hidden;
+      .sidebar__header {
+        display: flex;
+        justify-content: center;
+        margin: 20px auto;
+        border: 1px solid $--border-color-bbb;
+        width: 70%;
+        border-radius: 16px;
+        span {
+          display: block;
+          width: 50%;
+          border-radius: 16px;
+          padding: 8px 0;
+          font-size: $--font-size-base;
+          color: $--color-text-base;
+          cursor: pointer;
+          text-align: center;
+          &.active {
+            background-color: $--border-color-bbb;
+            color: $--color-white;
+            font-weight: 700;
+          }
+        }
+      }
     }
   }
 </style>
