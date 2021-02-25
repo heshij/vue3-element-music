@@ -211,6 +211,7 @@ export default {
       // audio.value.volume 取值 [0,1]
       audio.value.volume = volume / 100
     }
+    // 播放列表显示隐藏
     const handleShowPlaylist = () => {
       state.showSidebar = !state.showSidebar
     }
