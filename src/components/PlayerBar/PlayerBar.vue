@@ -49,7 +49,7 @@
       :muted="isMuted"
     ></audio>
   </div>
-  <playlist-sidebar :is-show="showSidebar" :song-list="getters.playList"></playlist-sidebar>
+  <playlist-sidebar :is-show="showSidebar" :song-list="getters.playList" :history-list="getters.historyList"></playlist-sidebar>
 </template>
 
 <script>
@@ -229,6 +229,8 @@ export default {
             _audio.src = newSong.url
             _audio.volume = state.volume
             _audio.play()
+            store.dispatch('songs/saveHistoryList', newSong)
+            console.log(getters.value.historyList)
             state.id = newSong.id
           }
         })
