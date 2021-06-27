@@ -45,8 +45,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   .recommend-mv-module {
     max-width: 1100px;
     min-width: 760px;

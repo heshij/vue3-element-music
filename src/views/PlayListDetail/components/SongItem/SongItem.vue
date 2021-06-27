@@ -82,8 +82,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   @mixin itemBox {
     display: block;
     padding: 0 12px;

@@ -50,8 +50,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   .comment-list-module {
     padding: 16px 0;
     > h2 {

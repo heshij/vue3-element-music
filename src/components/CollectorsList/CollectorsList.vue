@@ -33,8 +33,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   .collectors-list-module {
     padding: 16px 0;
     .collectors-list {

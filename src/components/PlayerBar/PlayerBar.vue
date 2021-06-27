@@ -49,7 +49,7 @@
       :muted="isMuted"
     ></audio>
   </div>
-  <playlist-sidebar :is-show="showSidebar" :song-list="getters.playList" :history-list="getters.historyList"></playlist-sidebar>
+  <playlist-sidebar ref="playlistRef" :is-show="showSidebar" :history-list="historyList"></playlist-sidebar>
 </template>
 
 <script>
@@ -71,9 +71,12 @@ export default {
       isMuted: false,
       volume: 0.5,
       volumeNum: 50,
-      showSidebar: false
+      showSidebar: false,
+      historyList: [],
+      playList: []
     })
     const audio = ref(null)
+    const playlistRef = ref(null)
     onMounted(() => audio)
     const store = useStore()
     const getters = computed(() => {
@@ -213,6 +216,8 @@ export default {
     }
     // 播放列表显示隐藏
     const handleShowPlaylist = () => {
+      state.historyList = getters.value.historyList
+      playlistRef.value.handleChangeSongList(0)
       state.showSidebar = !state.showSidebar
     }
     watch([() => getters.value.currentSong, () => getters.value.playing], ([newSong, newPlaying], [oldSong, oldPlaying]) => {
@@ -224,13 +229,13 @@ export default {
         nextTick(() => {
           const _audio = audio.value
           if (_audio) {
-            console.log('newCurrentSong:', newSong)
-            console.log('oldCurrentSong:', oldSong)
+            // console.log('newCurrentSong:', newSong)
+            // console.log('oldCurrentSong:', oldSong)
             _audio.src = newSong.url
             _audio.volume = state.volume
             _audio.play()
             store.dispatch('songs/saveHistoryList', newSong)
-            console.log(getters.value.historyList)
+            // console.log(getters.value.historyList)
             state.id = newSong.id
           }
         })
@@ -258,6 +263,7 @@ export default {
       modeIcon,
       muteIcon,
       audio,
+      playlistRef,
       togglePlaying,
       changeMode,
       prevSong,
@@ -278,8 +284,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   .player-bar-wrapper {
     position: fixed;
     left: 0;

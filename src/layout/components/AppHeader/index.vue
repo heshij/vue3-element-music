@@ -14,7 +14,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/variables.scss";
   .music-header {
     position: fixed;
     top: 0;

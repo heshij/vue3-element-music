@@ -105,8 +105,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   .main-wrapper {
     width: 100%;
     min-height: calc(100vh - 60px);

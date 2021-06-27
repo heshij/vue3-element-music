@@ -8,7 +8,7 @@
                   @click="handleChangeSongList(index)">{{item}}</span>
         </div>
         <div class="sidebar__main--handle">
-          <span>总{{songList.length}}首</span>
+          <span>总{{renderSongList.length}}首</span>
           <div class="handle-wrapper">
             <span><i class="el-icon-folder-add"></i>收藏全部</span>
             <span><i class="el-icon-delete"></i>清空</span>
@@ -18,7 +18,7 @@
       <div class="sidebar__main--wrapper">
         <div class="sidebar__main--list">
           <ul class="playlist-wrapper">
-            <li v-for="(item, index) in nowSongList"
+            <li v-for="(item, index) in renderSongList"
                 :key="item.id"
                 :class="getters.currentSong.id === item.id && getters.playing ? 'playing' : ''"
             >
@@ -36,9 +36,9 @@
 
 <script>
 import { useStore } from 'vuex'
-import { onMounted, computed, reactive, toRefs } from 'vue'
+import { defineComponent, computed, reactive, toRefs } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'PlaylistSidebar',
   props: {
     isShow: {
@@ -54,35 +54,36 @@ export default {
       default: () => []
     }
   },
-  setup (props) {
+  emits: ['handleChangeSongList'],
+  setup (props, ctx) {
     const store = useStore()
     const state = reactive({
       tab: ['播放列表', '历史记录'],
       tabIndex: 0,
-      nowSongList: []
+      renderSongList: []
     })
     const getters = computed(() => {
       return {
         currentSong: store.getters['songs/currentSong'],
+        playList: store.getters['songs/playList'],
         playing: store.getters['songs/playing']
       }
     })
-    onMounted(() => {
-      state.nowSongList = props.songList
-    })
     const playSong = (item, index) => {
       store.dispatch('songs/selectPlay', {
-        list: props.songList,
+        list: state.renderSongList,
         index
       })
     }
     const handleChangeSongList = (index) => {
       state.tabIndex = index
-      if (state.nowSongList === props.songList) {
-        state.nowSongList = props.historyList
+      if (state.tabIndex === 1) {
+        state.renderSongList = props.historyList
+        console.log(state.renderSongList)
       } else {
-        state.nowSongList = props.songList
+        state.renderSongList = getters.value.playList
       }
+      ctx.emit('handleChangeSongList', index)
     }
     return {
       ...toRefs(state),
@@ -91,13 +92,10 @@ export default {
       handleChangeSongList
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
-
   @mixin itemBox {
     display: block;
     padding: 0 12px;

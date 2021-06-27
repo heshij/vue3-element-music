@@ -54,8 +54,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/mixin.scss";
-  @import "@/styles/variables.scss";
   .comment-module {
     padding: 16px 0;
   }

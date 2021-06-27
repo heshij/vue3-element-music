@@ -24,7 +24,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "@/styles/variables.scss";
   .banner-wrapper {
     max-width: 1100px;
     min-width: 760px;
